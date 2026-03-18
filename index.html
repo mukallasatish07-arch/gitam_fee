@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College Internship Fee Payment</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #eef2f3;
+      color: #222;
+    }
+
+    .topbar {
+      background: #00796b;
+      color: white;
+      padding: 18px 24px;
+      font-size: 28px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .topbar span {
+      font-size: 16px;
+      font-weight: normal;
+    }
+
+    .container {
+      display: flex;
+      min-height: calc(100vh - 72px);
+    }
+
+    .sidebar {
+      width: 220px;
+      background: #f7f9fa;
+      padding: 20px;
+      border-right: 1px solid #d9e1e5;
+    }
+
+    .menu-item {
+      background: white;
+      border: 1px solid #d8e4e7;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 16px;
+      text-align: center;
+      font-size: 18px;
+      color: #4a4a4a;
+    }
+
+    .menu-item.active {
+      background: #d8efeb;
+      border-color: #00796b;
+      color: #00796b;
+      font-weight: bold;
+    }
+
+    .main {
+      flex: 1;
+      padding: 28px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      max-width: 1050px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 40px;
+      margin-bottom: 25px;
+      color: #1f1f1f;
+    }
+
+    .section-line {
+      border-bottom: 1px solid #e2e7ea;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #cfd8dc;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: #00796b;
+      box-shadow: 0 0 0 3px rgba(0,121,107,0.12);
+    }
+
+    .fee-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fbfb;
+      border: 1px solid #dce8ea;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .fee-box .amount {
+      color: #00796b;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .payment-options {
+      background: #e8f5f3;
+      border-radius: 12px;
+      padding: 18px;
+      margin: 20px 0;
+      border: 1px solid #c7e7e1;
+    }
+
+    .payment-options label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 25px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .checkbox-line {
+      margin: 25px 0;
+      font-size: 16px;
+    }
+
+    .checkbox-line input {
+      width: auto;
+      margin-right: 8px;
+      transform: scale(1.2);
+    }
+
+    .btn-wrap {
+      text-align: center;
+      margin-top: 25px;
+    }
+
+    button {
+      background: #00796b;
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin: 6px;
+    }
+
+    button:hover {
+      background: #00665a;
+    }
+
+    .receipt {
+      display: none;
+      margin-top: 35px;
+      border: 2px dashed #00796b;
+      border-radius: 16px;
+      padding: 25px;
+      background: #fcffff;
+    }
+
+    .receipt h2 {
+      color: #00796b;
+      margin-bottom: 18px;
+      font-size: 30px;
+    }
+
+    .receipt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .receipt-item {
+      background: #f4fafa;
+      border: 1px solid #d7e7e7;
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .receipt-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #444;
+    }
+
+    .success {
+      color: #0b8f4d;
+      font-weight: bold;
+      margin-top: 15px;
+      font-size: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+      }
+
+      .menu-item {
+        min-width: 160px;
+        margin-bottom: 0;
+      }
+
+      .row,
+      .receipt-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+
+      .fee-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      #receiptSection, #receiptSection * {
+        visibility: visible;
+      }
+
+      #receiptSection {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: block !important;
+        border: none;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div>G-Pay</div>
+    <span id="currentDateTime"></span>
+  </div>
+
+  <div class="container">
+    <div class="sidebar">
+      <div class="menu-item">Profile</div>
+      <div class="menu-item">Payment History</div>
+      <div class="menu-item">Tuition Fee</div>
+      <div class="menu-item active">Internship Fee</div>
+      <div class="menu-item">Bus Fee</div>
+      <div class="menu-item">Misc Fee</div>
+    </div>
+
+    <div class="main">
+      <div class="card">
+        <div class="section-line">
+          <h1>Internship Fee Payment</h1>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Student Name</label>
+            <input type="text" id="studentName" placeholder="Enter student name" />
+          </div>
+          <div>
+            <label>Roll Number</label>
+            <input type="text" id="rollNumber" placeholder="Enter roll number" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Branch</label>
+            <input type="text" id="branch" placeholder="Enter branch" />
+          </div>
+          <div>
+            <label>Academic Year</label>
+            <select id="year">
+              <option value="">Select year</option>
+              <option>1st Year</option>
+              <option>2nd Year</option>
+              <option>3rd Year</option>
+              <option>4th Year</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="fee-box">
+          <div>Internship Fee</div>
+          <div class="amount">₹13,500</div>
+        </div>
+
+        <div class="payment-options">
+          <label><input type="radio" name="paymentMode" value="UPI" checked> UPI</label>
+          <label><input type="radio" name="paymentMode" value="Card"> Card</label>
+          <label><input type="radio" name="paymentMode" value="Net Banking"> Net Banking</label>
+        </div>
+
+        <div class="checkbox-line">
+          <label>
+            <input type="checkbox" id="terms" />
+            I accept terms & conditions
+          </label>
+        </div>
+
+        <div class="btn-wrap no-print">
+          <button onclick="makePayment()">Proceed to Pay</button>
+        </div>
+
+        <div class="receipt" id="receiptSection">
+          <h2>Payment Receipt</h2>
+          <div class="success">Payment Successful</div>
+
+          <div class="receipt-grid">
+            <div class="receipt-item">
+              <strong>Student Name</strong>
+              <span id="rName"></span>
+            </div>
+            <div class="receipt-item">
+              <strong>Roll Number</strong>
+              <span id="rRoll"></span>
+            </div>
+            <div class="receipt-item">
+              <strong>Branch</strong>
+              <span id="rBranch"></span>
+            </div>
+            <div class="receipt-item">
+              <strong>Academic Year</strong>
+              <span id="rYear"></span>
+            </div>
+            <div class="receipt-item">
+              <strong>Fee Type</strong>
+              <span>Internship Fee</span>
+            </div>
+            <div class="receipt-item">
+              <strong>Amount Paid</strong>
+              <span>₹13,500</span>
+            </div>
+            <div class="receipt-item">
+              <strong>Payment Mode</strong>
+              <span id="rMode"></span>
+            </div>
+            <div class="receipt-item">
+              <strong>Transaction ID</strong>
+              <span id="rTxn"></span>
+            </div>
+            <div class="receipt-item full">
+              <strong>Date & Time</strong>
+              <span id="rDate"></span>
+            </div>
+          </div>
+
+          <div class="btn-wrap no-print">
+            <button onclick="window.print()">Print Receipt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById("currentDateTime").textContent =
+        "Date: " + now.toLocaleDateString() + " " + now.toLocaleTimeString();
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    function generateTransactionId() {
+      return "TXN" + Date.now() + Math.floor(Math.random() * 1000);
+    }
+
+    function makePayment() {
+      const name = document.getElementById("studentName").value.trim();
+      const roll = document.getElementById("rollNumber").value.trim();
+      const branch = document.getElementById("branch").value.trim();
+      const year = document.getElementById("year").value;
+      const terms = document.getElementById("terms").checked;
+      const paymentMode = document.querySelector('input[name="paymentMode"]:checked').value;
+
+      if (!name || !roll || !branch || !year) {
+        alert("Please fill all student details.");
+        return;
+      }
+
+      if (!terms) {
+        alert("Please accept terms & conditions.");
+        return;
+      }
+
+      const txnId = generateTransactionId();
+      const paymentDate = new Date().toLocaleString();
+
+      document.getElementById("rName").textContent = name;
+      document.getElementById("rRoll").textContent = roll;
+      document.getElementById("rBranch").textContent = branch;
+      document.getElementById("rYear").textContent = year;
+      document.getElementById("rMode").textContent = paymentMode;
+      document.getElementById("rTxn").textContent = txnId;
+      document.getElementById("rDate").textContent = paymentDate;
+
+      document.getElementById("receiptSection").style.display = "block";
+      document.getElementById("receiptSection").scrollIntoView({ behavior: "smooth" });
+    }
+  </script>
+</body>
+</html>
